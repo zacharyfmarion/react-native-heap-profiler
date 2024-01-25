@@ -1,6 +1,6 @@
 # react-native-heap-profiler
 
-A fast way to take a Hermes heap profile from javascript in React Native.
+A fast way to take a Hermes heap profile from javascript in React Native. Inspired by [react-native-release-profiler](https://github.com/margelo/react-native-release-profiler).
 
 ## Why
 
