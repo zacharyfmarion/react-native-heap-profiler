@@ -4,7 +4,7 @@ A fast way to take a Hermes heap profile from javascript in React Native. Inspir
 
 ## Why
 
-Sometimes it is useful to be able to imperatively take a heap profile from javascript. This is especially useful when you want to take a heap profile at a specific point in time, for example when a user performs a specific action.
+Sometimes it is useful to be able to imperatively take a heap profile from javascript. This is especially useful when you want to take a heap profile at a specific point in time, for example when a user performs a specific action. I have also found that streaming the profile using chrome devtools is much less reliable and leads to a lot of app crashes and hangs (which may be improved in the future).
 
 ## Installation
 
