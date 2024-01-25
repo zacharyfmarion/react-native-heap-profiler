@@ -22,7 +22,7 @@ yarn add react-native-heap-profiler
 ```ts
 import { createSnapshot } from 'react-native-heap-profiler';
 
-const path = createSnapshot();
+createSnapshot();
 ```
 
 4. Pull the snapshot from your device
