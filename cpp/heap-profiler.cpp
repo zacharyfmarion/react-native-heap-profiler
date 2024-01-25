@@ -5,6 +5,6 @@ namespace heapprofiler {
     namespace jsi = facebook::jsi;
 
     void createHeapSnapshot(jsi::Runtime &rt, const std::string filePath) {
-        rt.instrumentation().createHeapSnapshotToFile(filePath);
+        rt.instrumentation().createSnapshotToFile(filePath);
     }
 }  // namespace heapprofiler
