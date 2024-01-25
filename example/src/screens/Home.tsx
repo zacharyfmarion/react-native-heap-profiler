@@ -91,7 +91,7 @@ export function Home() {
 
   return (
     <View style={styles.mainContainer}>
-      <Text>Heap Profiler!</Text>
+      <Text style={[styles.titleText]}>Heap Profiler!</Text>
     </View>
   );
 }
@@ -100,6 +100,12 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleText: {
+    fontSize: 30,
+    fontWeight: 'bold',
   },
   testList: {
     flex: 9,
