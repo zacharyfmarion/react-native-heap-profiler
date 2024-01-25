@@ -163,6 +163,7 @@
     ]
   },
   "dependencies": {
-    "@react-native-community/cli": "^13.5.1"
+    "@react-native-community/cli": "^13.5.1",
+    "commander": "^11.1.0"
   }
 }
