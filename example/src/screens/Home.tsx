@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { createSnapshot } from 'react-native-heap-profiler';
+import { createHeapSnapshot } from 'react-native-heap-profiler';
 import { Text } from '../components/Text';
 import Share from 'react-native-share';
 import { Trie } from 'trie-typed';
@@ -69,7 +69,7 @@ wordlists.forEach(([locale, wordList]) => {
 export function Home() {
   useEffect(() => {
     setTimeout(async () => {
-      const path = createSnapshot();
+      const path = createHeapSnapshot();
       const actualPath = `file://${path}`;
 
       // On android you can just run:

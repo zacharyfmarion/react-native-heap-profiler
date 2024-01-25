@@ -35,7 +35,7 @@ public class HeapProfilerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public boolean createSnapshot() {
+  public boolean createHeapSnapshot() {
     try {
       System.loadLibrary("heap-profiler");
 

@@ -8,7 +8,7 @@
 @implementation HeapProfiler
 RCT_EXPORT_MODULE(HeapProfiler)
 
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(createSnapshot) {
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(createHeapSnapshot) {
     NSLog(@"Taking heap snapshot");
 
     RCTBridge *bridge = [RCTBridge currentBridge];
@@ -42,7 +42,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(createSnapshot) {
         return @false;
     }
 
-    heapprofiler::createSnapshot(runtime, finalPath);
+    heapprofiler::createHeapSnapshot(runtime, finalPath);
 
     return fileURL.path;
 }

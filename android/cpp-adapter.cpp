@@ -25,7 +25,7 @@ private:
     auto jsiRuntime = reinterpret_cast<jsi::Runtime *>(jsiRuntimePtr);
     std::string filePath = fromJavaString(jFilePath);
 
-    heapprofiler::createSnapshot(*jsiRuntime, filePath);
+    heapprofiler::createHeapSnapshot(*jsiRuntime, filePath);
   }
 
   // Helper function to convert JNI string to C++ string

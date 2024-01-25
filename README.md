@@ -20,9 +20,9 @@ yarn add react-native-heap-profiler
 3. Take a heap profile
 
 ```ts
-import { createSnapshot } from 'react-native-heap-profiler';
+import { createHeapSnapshot } from 'react-native-heap-profiler';
 
-createSnapshot();
+createHeapSnapshot();
 ```
 
 4. Pull the snapshot from your device
@@ -52,7 +52,7 @@ On iOS you can use `react-native-share` to share the file to your computer:
 
 ```ts
 if (Platform.OS === 'ios') {
-  const path = createSnapshot();
+  const path = createHeapSnapshot();
   const actualPath = `file://${path}`;
 
   try {
