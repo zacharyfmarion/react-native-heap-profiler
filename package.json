@@ -1,6 +1,6 @@
 {
   "name": "react-native-heap-profiler",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Heap profiler for react-native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
