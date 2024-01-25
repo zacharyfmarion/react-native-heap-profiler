@@ -376,7 +376,7 @@ PODS:
   - React-jsinspector (0.72.7)
   - React-logger (0.72.7):
     - glog
-  - react-native-heap-profiler (0.0.2):
+  - react-native-heap-profiler (0.0.4):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-performance (5.1.0):
@@ -723,7 +723,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c49502e5d02112247ee4526bc3ccfc891ae3eb9b
   React-jsinspector: 8baadae51f01d867c3921213a25ab78ab4fbcd91
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
-  react-native-heap-profiler: 14617198ef92d6e4be45d58dbc641727701aec3e
+  react-native-heap-profiler: 4694c332ceede7609eb26ec896cb17deb3532f7c
   react-native-performance: cef2b618d47b277fb5c3280b81a3aad1e72f2886
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   React-NativeModulesApple: b6868ee904013a7923128892ee4a032498a1024a
