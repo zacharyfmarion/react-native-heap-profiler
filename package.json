@@ -1,7 +1,7 @@
 {
   "name": "react-native-heap-profiler",
   "version": "0.2.1",
-  "description": "Fast Trie for React Native",
+  "description": "Heap profiler for react-native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
