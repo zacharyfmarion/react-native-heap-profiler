@@ -9,12 +9,11 @@ import { getAndroidProject } from '@react-native-community/cli-platform-android'
 
 /**
  * Get the last modified hermes profile
- * @param packageNameWithSuffix
  */
-function getLatestFile(packageNameWithSuffix: string): string {
+function getLatestFile(packageName: string): string {
   try {
     const file =
-      execSync(`adb shell run-as ${packageNameWithSuffix} ls cache/ -tp | grep -v /$ | grep -E '.heapsnapshot' | head -1
+      execSync(`adb shell run-as ${packageName} ls cache/ -tp | grep -v /$ | grep -E '.heapsnapshot' | head -1
         `);
     return file.toString().trim();
   } catch (e) {
@@ -28,14 +27,12 @@ function execSyncWithLog(command: string) {
 }
 
 /**
- * Pull and convert a Hermes tracing profile to Chrome tracing profile
- * @param ctx
- * @param appId
+ * Pull a heap snapshot from an android device
  */
 export async function downloadProfile(
   ctx: Config,
   appId?: string,
-  dstPath?: string
+  outputDir?: string
 ) {
   try {
     const androidProject = getAndroidProject(ctx);
@@ -51,16 +48,16 @@ export async function downloadProfile(
     logger.info(`File to be pulled: ${file}`);
 
     // If destination path is not specified, pull to the current directory
-    dstPath = dstPath || ctx.root;
+    outputDir = outputDir || ctx.root;
 
     logger.debug('Internal commands run to pull the file:');
 
-    // If --raw, pull the hermes profile to dstPath
+    // If --raw, pull the hermes profile to outputDir
     execSyncWithLog(
-      `adb shell run-as ${packageNameWithSuffix} cat cache/${file} > ${dstPath}/${file}`
+      `adb shell run-as ${packageNameWithSuffix} cat cache/${file} > ${outputDir}/${file}`
     );
 
-    logger.success(`Successfully pulled the file to ${dstPath}/${file}`);
+    logger.success(`Successfully pulled the file to ${outputDir}/${file}`);
   } catch (e) {
     throw e;
   }
@@ -68,9 +65,9 @@ export async function downloadProfile(
 
 const { program } = require('commander');
 
-program.requiredOption('--appId <string>').option('--dstPath <string>');
+program.requiredOption('--appId <string>').option('--outputDir <string>');
 
 program.parse();
 
 const options = program.opts();
-downloadProfile(getContext(), options.appId, options.dstPath);
+downloadProfile(getContext(), options.appId, options.outputDir);

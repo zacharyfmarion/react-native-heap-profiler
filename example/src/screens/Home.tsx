@@ -73,7 +73,7 @@ export function Home() {
       const actualPath = `file://${path}`;
 
       // On android you can just run:
-      // npx react-native-heap-profiler --appId=com.fasttrieexample --dstPath=<my-path>
+      // npx react-native-heap-profiler --appId=com.fasttrieexample --outputDir=<my-path>
       if (Platform.OS === 'ios') {
         try {
           await Share.open({
