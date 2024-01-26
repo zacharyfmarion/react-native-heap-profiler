@@ -4,7 +4,9 @@ A fast way to take a Hermes heap profile from javascript in React Native. Inspir
 
 ## Why
 
-Sometimes it is useful to be able to imperatively take a heap profile from javascript. This is especially useful when you want to take a heap profile at a specific point in time, for example when a user performs a specific action. I have also found that streaming the profile using chrome devtools is much less reliable and leads to a lot of app crashes and hangs (which may be improved in the future). Hermes also exposes some other helpful information (e.g. heap data) that is not available in the chrome devtools.
+* Sometimes it is useful to be able to imperatively take a heap profile from javascript, for example when a user performs a specific action. 
+* Streaming the profile using chrome devtools is much less reliable and leads to a lot of app crashes and hangs (which may be improved in the future). 
+* Hermes also exposes some other helpful information (e.g. heap data) that is not available in the chrome devtools.
 
 ## Installation
 
@@ -16,7 +18,11 @@ yarn add react-native-heap-profiler
 ## High Level API
 
 ```ts
-import { createHeapSnapshot, getHeapInfo, measureAllocationSize } from 'react-native-heap-profiler';
+import { 
+  getHeapInfo, 
+  createHeapSnapshot, 
+  measureAllocationSize 
+} from 'react-native-heap-profiler';
 
 // Run `npx react-native-heap-profiler --appId=com.your.app.id --outputDir=/path/to/output`
 // to get the heap snapshot from your android device
