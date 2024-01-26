@@ -3,7 +3,6 @@
 #include <fbjni/fbjni.h>
 #include <jni.h>
 #include <jsi/jsi.h>
-#include <string>
 
 using namespace facebook;
 
@@ -14,17 +13,20 @@ struct HeapProfilerBridge : jni::JavaClass<HeapProfilerBridge> {
   static void registerNatives() {
     javaClassStatic()->registerNatives(
         {
-         makeNativeMethod("createNativeSnapshotJsi",
-                          HeapProfilerBridge::createNativeSnapshotJsi)
+         makeNativeMethod("installNativeJsi", HeapProfilerBridge::installNativeJsi),
+         makeNativeMethod("createNativeSnapshotJsi", HeapProfilerBridge::createNativeSnapshotJsi)
         });
   }
 
 private:
-  static void createNativeSnapshotJsi(
-      jni::alias_ref<jni::JObject> thiz, jlong jsiRuntimePtr, jstring jFilePath) {
+  static void installNativeJsi(jni::alias_ref<jni::JObject> thiz, jlong jsiRuntimePtr) {
+    auto jsiRuntime = reinterpret_cast<jsi::Runtime *>(jsiRuntimePtr);
+    heapprofiler::install(*jsiRuntime);
+  }
+
+  static void createNativeSnapshotJsi(jni::alias_ref<jni::JObject> thiz, jlong jsiRuntimePtr, jstring jFilePath) {
     auto jsiRuntime = reinterpret_cast<jsi::Runtime *>(jsiRuntimePtr);
     std::string filePath = fromJavaString(jFilePath);
-
     heapprofiler::createHeapSnapshot(*jsiRuntime, filePath);
   }
 

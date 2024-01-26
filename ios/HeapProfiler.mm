@@ -8,6 +8,26 @@
 @implementation HeapProfiler
 RCT_EXPORT_MODULE(HeapProfiler)
 
+RCT_EXPORT_METHOD(install) {
+    NSLog(@"Installing heap profiler");
+
+    RCTBridge *bridge = [RCTBridge currentBridge];
+    RCTCxxBridge *cxxBridge = (RCTCxxBridge *)bridge;
+    if (cxxBridge == nil) {
+        return;
+    }
+
+    using namespace facebook;
+
+    auto jsiRuntime = (jsi::Runtime *)cxxBridge.runtime;
+    if (jsiRuntime == nil) {
+        return;
+    }
+    auto &runtime = *jsiRuntime;
+
+    heapprofiler::install(runtime);
+}
+
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(createHeapSnapshot) {
     NSLog(@"Taking heap snapshot");
 

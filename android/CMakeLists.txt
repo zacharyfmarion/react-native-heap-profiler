@@ -15,6 +15,7 @@ add_library(
   ${PACKAGE_NAME}
   SHARED
   ../cpp/heap-profiler.cpp
+  ../cpp/HeapProfilerHostObject.cpp
   cpp-adapter.cpp
 )
 

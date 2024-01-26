@@ -23,6 +23,8 @@ export const Button: React.FC<ButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#99FFFF',
+    flexShrink: 0,
+    width: '100%',
     padding: 10,
     borderRadius: 5,
     alignContent: 'center',

@@ -35,10 +35,20 @@ public class HeapProfilerModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public boolean createHeapSnapshot() {
+  public boolean install() {
     try {
       System.loadLibrary("heap-profiler");
+      HeapProfilerBridge.instance.install(getReactApplicationContext());
+      return true;
+    } catch (Exception exception) {
+      Log.e(NAME, "Failed to install JSI Bindings!", exception);
+      return false;
+    }
+  }
 
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public boolean createHeapSnapshot() {
+    try {
       File tempFile = File.createTempFile("sampling-profile", ".heapsnapshot", getReactApplicationContext().getCacheDir());
       String outputPath = tempFile.getPath();
 

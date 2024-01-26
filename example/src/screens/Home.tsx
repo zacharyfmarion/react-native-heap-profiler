@@ -1,106 +1,115 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { createHeapSnapshot } from 'react-native-heap-profiler';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import {
+  createHeapSnapshot,
+  getHeapInfo,
+  measureAllocationSize,
+  type HermesHeapInfo,
+} from 'react-native-heap-profiler';
 import { Text } from '../components/Text';
 import Share from 'react-native-share';
-import { Trie } from 'trie-typed';
-import {
-  wordlistCZ,
-  wordlistEN,
-  wordlistES,
-  wordlistFR,
-  wordlistIT,
-  wordlistJP,
-  wordlistKR,
-  wordlistPT,
-  wordlistZHCN,
-  wordlistZHTW,
-} from '../wordlists/allWordlists';
+
 import { Platform } from 'react-native';
+import { Button } from '../components/Button';
 
-export type LocalType =
-  | 'allLangs'
-  | 'en'
-  | 'es'
-  | 'fr'
-  | 'it'
-  | 'pt'
-  | 'cz'
-  | 'jp'
-  | 'kr'
-  | 'zhCN'
-  | 'zhTW';
+import { Trie } from 'trie-typed';
+import { wordlistEN } from '../wordlists/allWordlists';
+import JSONTree from 'react-native-json-tree';
 
-// Use some memory
-const bip39Dictionaries: Record<LocalType, Trie> = {
-  allLangs: new Trie(),
-  en: new Trie(),
-  es: new Trie(),
-  fr: new Trie(),
-  it: new Trie(),
-  pt: new Trie(),
-  cz: new Trie(),
-  jp: new Trie(),
-  kr: new Trie(),
-  zhCN: new Trie(),
-  zhTW: new Trie(),
-};
-
-const wordlists: [LocalType, string[]][] = [
-  ['en', wordlistEN],
-  ['es', wordlistES],
-  ['fr', wordlistFR],
-  ['it', wordlistIT],
-  ['pt', wordlistPT],
-  ['cz', wordlistCZ],
-  ['jp', wordlistJP],
-  ['kr', wordlistKR],
-  ['zhCN', wordlistZHCN],
-  ['zhTW', wordlistZHTW],
-];
-
-wordlists.forEach(([locale, wordList]) => {
-  for (const word of wordList) {
-    bip39Dictionaries[locale].add(word);
-    bip39Dictionaries.allLangs.add(word);
-  }
-});
+// Add some memory to the heap
+import './initWordlists';
 
 export function Home() {
-  useEffect(() => {
-    setTimeout(async () => {
-      const path = createHeapSnapshot();
-      const actualPath = `file://${path}`;
+  const [allocatedBytes, setAllocatedBytes] = useState<number[]>([]);
+  const [isMeasuringAllocations, setIsMeasuringAllocations] = useState(false);
+  const [heapInfo, setHeapInfo] = useState<HermesHeapInfo | undefined>();
 
-      // On android you can just run:
-      // npx react-native-heap-profiler --appId=com.fasttrieexample --outputDir=<my-path>
-      if (Platform.OS === 'ios') {
-        try {
-          await Share.open({
-            url: actualPath,
-            title: 'Save profile',
-            type: 'application/json',
-          });
-        } catch (error) {
-          // An error is thrown when the user doesn't share, but we catch
-          // this since that is fine
-        }
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!isMeasuringAllocations) {
+        return;
       }
-    }, 1000);
-  });
+
+      const allocationSize = measureAllocationSize(() => {
+        const trie = new Trie();
+        for (const word of wordlistEN) {
+          trie.add(word);
+        }
+      });
+
+      setAllocatedBytes((bytes) => [...bytes, allocationSize]);
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [isMeasuringAllocations]);
+
+  const takeHeapSnapshot = useCallback(async () => {
+    const path = createHeapSnapshot();
+    const actualPath = `file://${path}`;
+
+    if (Platform.OS === 'ios') {
+      try {
+        await Share.open({
+          url: actualPath,
+          title: 'Save profile',
+          type: 'application/json',
+        });
+      } catch (error) {}
+    }
+  }, []);
+
+  const getHeapInfoCallback = useCallback(() => {
+    const stats = getHeapInfo(true);
+    setHeapInfo(stats);
+  }, []);
+
+  const toggleIsMeasuringAllocations = useCallback(() => {
+    if (!isMeasuringAllocations) {
+      setAllocatedBytes([]);
+    }
+    setIsMeasuringAllocations((isMeasuring) => !isMeasuring);
+  }, [isMeasuringAllocations]);
+
+  const jsonData = useMemo(() => {
+    return isMeasuringAllocations ? allocatedBytes : heapInfo;
+  }, [isMeasuringAllocations, allocatedBytes, heapInfo]);
 
   return (
     <View style={styles.mainContainer}>
-      <Text style={[styles.titleText]}>Heap Profiler!</Text>
+      <View style={styles.testList}>
+        <ScrollView style={styles.scrollView}>
+          <JSONTree theme={customTheme} data={jsonData as any} />
+        </ScrollView>
+      </View>
+      <View style={styles.menu}>
+        <View style={{ marginBottom: 10 }}>
+          <Button
+            title={
+              isMeasuringAllocations
+                ? 'Stop measuring allocations'
+                : 'Start measuring allocations'
+            }
+            onPress={toggleIsMeasuringAllocations}
+          />
+        </View>
+        <View style={{ marginBottom: 10 }}>
+          <Button title="Take heap snapshot" onPress={takeHeapSnapshot} />
+        </View>
+        <Button title="Get Heap info" onPress={getHeapInfoCallback} />
+      </View>
     </View>
   );
 }
+
+const customTheme = {
+  width: '100%',
+};
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   titleText: {
@@ -108,16 +117,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   testList: {
-    flex: 9,
+    flex: 1,
+    width: '100%',
   },
   menu: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignContent: 'space-around',
-    justifyContent: 'space-around',
+    width: '100%',
+    flexDirection: 'column',
+    padding: 25,
   },
   scrollView: {
-    paddingHorizontal: 10,
+    flex: 1,
+    width: '100%',
   },
 });
