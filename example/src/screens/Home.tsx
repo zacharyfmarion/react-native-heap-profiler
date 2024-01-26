@@ -6,14 +6,19 @@ import {
   measureAllocationSize,
   type HermesHeapInfo,
 } from 'react-native-heap-profiler';
-import { Text } from '../components/Text';
 import Share from 'react-native-share';
 
 import { Platform } from 'react-native';
 import { Button } from '../components/Button';
 
 import { Trie } from 'trie-typed';
-import { wordlistEN } from '../wordlists/allWordlists';
+import {
+  wordlistCZ,
+  wordlistEN,
+  wordlistES,
+  wordlistIT,
+  wordlistKR,
+} from '../wordlists/allWordlists';
 import JSONTree from 'react-native-json-tree';
 
 // Add some memory to the heap
@@ -32,8 +37,16 @@ export function Home() {
 
       const allocationSize = measureAllocationSize(() => {
         const trie = new Trie();
-        for (const word of wordlistEN) {
-          trie.add(word);
+        for (const wordlist of [
+          wordlistEN,
+          wordlistES,
+          wordlistCZ,
+          wordlistKR,
+          wordlistIT,
+        ]) {
+          for (const word of wordlist) {
+            trie.add(word);
+          }
         }
       });
 
@@ -93,11 +106,7 @@ export function Home() {
           />
         </View>
         <View style={{ marginBottom: 10 }}>
-          <Button
-            disabled={process.env.NODE_ENV === 'production'}
-            title="Take heap snapshot"
-            onPress={takeHeapSnapshot}
-          />
+          <Button title="Take heap snapshot" onPress={takeHeapSnapshot} />
         </View>
         <Button title="Get Heap info" onPress={getHeapInfoCallback} />
       </View>
