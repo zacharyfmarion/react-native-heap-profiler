@@ -25,14 +25,14 @@ import {
 } from 'react-native-heap-profiler';
 
 // Run `npx react-native-heap-profiler --appId=com.your.app.id --outputDir=/path/to/output`
-// to get the heap snapshot from your android device
+// to get the heap snapshot from your android device (dev only)
 const path = createHeapSnapshot();
 
-// Get realtime heap information from hermes
+// Get realtime heap information from hermes (production safe)
 const heapInfo = getHeapInfo(path);
 console.log(heapInfo.hermes_allocatedBytes);
 
-// Logs the number of bytes allocated by the function
+// Logs the number of bytes allocated by the function (production safe)
 const allocationSize = measureAllocationSize(() => {
   new Array(1000000);
 });
@@ -130,7 +130,7 @@ export interface HermesHeapInfo {
 
 ### Functions 
 
-`createHeapSnapshot(): string`
+`createHeapSnapshot(): string` (Dev only!)
 
 > Takes a heap snapshot and returns the path to the snapshot file. See the usage section above for details
 
@@ -140,7 +140,7 @@ const pathToFile = createHeapSnapshot();
 
 `getHeapInfo(includeExpensive: boolean): HermesHeapInfo`
 
-> Request statistics about the current state of the runtime's heap. This function can be called at any time, and should produce information that is correct at the instant it is called (i.e, not stale).
+> Request statistics about the current state of the runtime's heap. This function can be called at any time, and should produce information that is correct at the instant it is called (i.e, not stale). Runs in production!
 
 ```ts
 const heapInfo = getHeapInfo(true);
@@ -149,7 +149,7 @@ console.log(heapInfo.hermes_allocatedBytes); // 123456
 
 `measureAllocationSize(f: () => any): number`
 
-> Compares the number of bytes allocated before and after a function call and returns the difference. This is useful for measuring the size of objects. Note that this function runs garbage collection before the function, so the results should be quite stable. Still, it is best to average a series of many measurements and exclude outliers.
+> Compares the number of bytes allocated before and after a function call and returns the difference. This is useful for measuring the size of objects. Note that this function runs garbage collection before the function, so the results should be quite stable. Still, it is best to average a series of many measurements and exclude outliers. Works in production and development.
 
 ```javascript
 const allocationSize = measureAllocationSize(() => {
