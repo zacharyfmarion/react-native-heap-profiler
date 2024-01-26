@@ -14,18 +14,20 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install) {
     RCTBridge *bridge = [RCTBridge currentBridge];
     RCTCxxBridge *cxxBridge = (RCTCxxBridge *)bridge;
     if (cxxBridge == nil) {
-        return;
+        return @false;
     }
 
     using namespace facebook;
 
     auto jsiRuntime = (jsi::Runtime *)cxxBridge.runtime;
     if (jsiRuntime == nil) {
-        return;
+        return @false;
     }
     auto &runtime = *jsiRuntime;
 
     heapprofiler::install(runtime);
+
+    return @true;
 }
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(createHeapSnapshot) {
