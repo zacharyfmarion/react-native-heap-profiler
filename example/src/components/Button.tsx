@@ -5,15 +5,24 @@ import { Text } from './Text';
 type ButtonProps = {
   title: string;
   onPress: () => void;
+  disabled?: boolean;
 };
 
 export const Button: React.FC<ButtonProps> = ({
   title,
+  disabled,
   onPress,
 }: ButtonProps) => {
   return (
     <View>
-      <TouchableOpacity style={styles.container} onPress={onPress}>
+      <TouchableOpacity
+        style={[
+          styles.container,
+          disabled && { backgroundColor: 'grey', opacity: 0.5 },
+        ]}
+        onPress={onPress}
+        disabled={disabled}
+      >
         <Text>{title}</Text>
       </TouchableOpacity>
     </View>

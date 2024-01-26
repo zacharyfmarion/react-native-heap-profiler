@@ -93,7 +93,11 @@ export function Home() {
           />
         </View>
         <View style={{ marginBottom: 10 }}>
-          <Button title="Take heap snapshot" onPress={takeHeapSnapshot} />
+          <Button
+            disabled={process.env.NODE_ENV === 'production'}
+            title="Take heap snapshot"
+            onPress={takeHeapSnapshot}
+          />
         </View>
         <Button title="Get Heap info" onPress={getHeapInfoCallback} />
       </View>
