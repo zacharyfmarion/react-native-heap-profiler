@@ -8,7 +8,7 @@
 @implementation HeapProfiler
 RCT_EXPORT_MODULE(HeapProfiler)
 
-RCT_EXPORT_METHOD(install) {
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install) {
     NSLog(@"Installing heap profiler");
 
     RCTBridge *bridge = [RCTBridge currentBridge];
