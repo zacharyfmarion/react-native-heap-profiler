@@ -13,7 +13,9 @@ export function measureAllocationSize(f: () => any): number {
   }
 
   if (__DEV__) {
-    throw new Error("Please don't run this in dev mode, it will skew results");
+    console.warn(
+      'Running measureAllocationSize with __DEV__=true, this may be less accurate'
+    );
   }
 
   // Trigger garbage collection to avoid measuring the allocation of the previous action
