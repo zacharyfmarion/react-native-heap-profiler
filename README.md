@@ -28,11 +28,11 @@ import {
 // to get the heap snapshot from your android device (dev only)
 const path = createHeapSnapshot();
 
-// Get realtime heap information from hermes (production safe)
+// Get realtime heap information from hermes (works in production)
 const heapInfo = getHeapInfo(path);
 console.log(heapInfo.hermes_allocatedBytes);
 
-// Logs the number of bytes allocated by the function (production safe)
+// Logs the number of bytes allocated by the function (works in production)
 const allocationSize = measureAllocationSize(() => {
   new Array(1000000);
 });
@@ -140,7 +140,7 @@ const pathToFile = createHeapSnapshot();
 
 `getHeapInfo(includeExpensive: boolean): HermesHeapInfo`
 
-> Request statistics about the current state of the runtime's heap. This function can be called at any time, and should produce information that is correct at the instant it is called (i.e, not stale). Runs in production!
+> Request statistics about the current state of the runtime's heap. This function can be called at any time, and should produce information that is correct at the instant it is called (i.e, not stale). Works in production and development.
 
 ```ts
 const heapInfo = getHeapInfo(true);

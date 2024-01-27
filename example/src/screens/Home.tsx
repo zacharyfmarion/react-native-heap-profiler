@@ -106,7 +106,10 @@ export function Home() {
           />
         </View>
         <View style={{ marginBottom: 10 }}>
-          <Button title="Take heap snapshot" onPress={takeHeapSnapshot} />
+          <Button
+            title="Take heap snapshot (dev only)"
+            onPress={takeHeapSnapshot}
+          />
         </View>
         <Button title="Get Heap info" onPress={getHeapInfoCallback} />
       </View>
